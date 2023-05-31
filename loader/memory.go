@@ -16,7 +16,7 @@ type memory struct {
 }
 
 // 文件监视器，文件更新时回写内存
-func (m memory) watch(idx int, s source.Source) {
+func (m *memory) watch(idx int, s source.Source) {
 	watcher := func(idx int, s source.Watcher) error {
 		for {
 			cs, err := s.Next()
@@ -24,8 +24,15 @@ func (m memory) watch(idx int, s source.Source) {
 				return err
 			}
 			m.sets[idx] = cs
-			m.SnapShot = SnapShot{Version: time.Now(), LastChange: cs}
+			fmt.Println(string(cs.Data))
+			//m.SnapShot = SnapShot{Version: time.Now(), LastChange: cs}
+			err = m.reload()
+			if err != nil {
+				return err
+			}
+
 		}
+
 	}
 	sourceWatcher, err := s.Watcher()
 	if err != nil {
@@ -36,7 +43,7 @@ func (m memory) watch(idx int, s source.Source) {
 	}
 }
 
-func (m memory) reload() error {
+func (m *memory) reload() error {
 
 	merge, err := m.options.Reader.Merge(m.sets...)
 	if err != nil {
@@ -49,7 +56,7 @@ func (m memory) reload() error {
 	return nil
 }
 
-func (m memory) Load(sources ...source.Source) error {
+func (m *memory) Load(sources ...source.Source) error {
 	var failedSource []interface{}
 	for _, source := range sources {
 		set, err := source.Read()
@@ -67,14 +74,12 @@ func (m memory) Load(sources ...source.Source) error {
 	}
 	// 首次转码
 	if err := m.reload(); err != nil {
-		panic(err)
 		return err
 	}
-	fmt.Println(m)
 	return nil
 }
 
-func (m memory) Snapshot() SnapShot {
+func (m *memory) Snapshot() SnapShot {
 	return m.SnapShot
 }
 

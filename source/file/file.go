@@ -19,8 +19,9 @@ func FileFormat(path string) string {
 	return parts[len(parts)-1]
 }
 
-func (f file) Read() (*source.ChangeSet, error) {
+func (f *file) Read() (*source.ChangeSet, error) {
 	file, err := os.Open(f.path)
+	defer file.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -41,12 +42,12 @@ func (f file) Read() (*source.ChangeSet, error) {
 	return changeSet, nil
 }
 
-func (f file) Write(*source.ChangeSet) (*source.ChangeSet, error) {
+func (f *file) Write(*source.ChangeSet) (*source.ChangeSet, error) {
 	return &source.ChangeSet{}, nil
 }
 
-func (f file) Watcher() (source.Watcher, error) {
-	return NewWatcher(&f)
+func (f *file) Watcher() (source.Watcher, error) {
+	return NewWatcher(f)
 }
 
 func NewSource(opts ...source.Option) source.Source {

@@ -2,6 +2,7 @@ package file
 
 import (
 	"auto_config/source"
+	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"os"
 )
@@ -24,7 +25,7 @@ func (w *watcher) Next() (*source.ChangeSet, error) {
 				}
 			}
 		}
-
+		fmt.Println(event)
 		c, err := w.f.Read()
 		if err != nil {
 			return nil, err

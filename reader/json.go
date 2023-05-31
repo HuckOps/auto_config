@@ -15,7 +15,7 @@ type jsonReader struct {
 }
 
 func (j *jsonReader) Merge(changes ...*source.ChangeSet) (*source.ChangeSet, error) {
-	merged := map[interface{}]interface{}{}
+	merged := map[string]interface{}{}
 	for _, change := range changes {
 		codec, ok := j.opts.Encoding[change.Format]
 		if !ok {
@@ -32,10 +32,8 @@ func (j *jsonReader) Merge(changes ...*source.ChangeSet) (*source.ChangeSet, err
 			return nil, err
 		}
 	}
-
 	// 序列化为json
 	b, err := j.json.Encode(merged)
-	print("ttt")
 	//b, err := json2.Marshal(merged)
 	if err != nil {
 		panic(err)

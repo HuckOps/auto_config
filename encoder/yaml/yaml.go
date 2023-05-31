@@ -2,7 +2,7 @@ package yaml
 
 import (
 	"auto_config/encoder"
-	yamlv2 "gopkg.in/yaml.v2"
+	yamlv2 "github.com/ghodss/yaml"
 )
 
 type yaml struct{}

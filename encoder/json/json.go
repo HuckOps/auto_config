@@ -3,14 +3,12 @@ package json
 import (
 	"auto_config/encoder"
 	jsonEncoding "encoding/json"
-	"fmt"
 )
 
 type json struct{}
 
 func (j json) Encode(v interface{}) ([]byte, error) {
 	r, err := jsonEncoding.Marshal(v)
-	fmt.Println(err)
 	if err != nil {
 		panic(err)
 	}
