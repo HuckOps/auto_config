@@ -9,12 +9,6 @@ import (
 
 func TestConfig(t *testing.T) {
 	var Dest map[string]interface{}
-	//sources := []Option{
-	//	WithSource(file.NewSource(file.WithPath("./test/test.yaml"))),
-	//}
-	//dests := []interface{}{
-	//	dest,
-	//}
 	w := func() {
 		fmt.Println(Dest)
 	}
@@ -24,9 +18,6 @@ func TestConfig(t *testing.T) {
 		panic(err)
 	}
 	config.Watcher()
-	//for {
-	//	fmt.Println(Dest)
-	//}
 	select {}
 }
 
@@ -41,19 +32,4 @@ func TestWatcher(t *testing.T) {
 		}
 	}(w)
 	select {}
-}
-
-func TestT(t *testing.T) {
-	t1 := make(chan string, 1)
-	go func(t chan string) {
-		for {
-			t <- "s"
-		}
-	}(t1)
-	for {
-		select {
-		case t := <-t1:
-			fmt.Println(t)
-		}
-	}
 }
