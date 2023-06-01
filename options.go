@@ -13,3 +13,9 @@ func WithSource(source source.Source) Option {
 		options.Source = append(options.Source, source)
 	}
 }
+
+func WithCallback(callback InitCallback) Option {
+	return func(options *Options) {
+		options.InitCallBack = append(options.InitCallBack, callback)
+	}
+}

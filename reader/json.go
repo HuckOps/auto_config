@@ -48,7 +48,11 @@ func (j *jsonReader) Merge(changes ...*source.ChangeSet) (*source.ChangeSet, err
 
 	return cs, nil
 }
+func (j *jsonReader) Scan(data []byte, v interface{}) error {
+	jsonEncoding := j.opts.Encoding["json"]
+	return jsonEncoding.Decode(data, v)
 
+}
 func NewReader(opts ...Option) Reader {
 	options := NewOptions(opts...)
 	return &jsonReader{

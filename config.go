@@ -7,10 +7,12 @@ import (
 )
 
 type Options struct {
-	Reader reader.Reader
-	Entity interface{}
-	Loader loader.Loader
-	Source []source.Source
+	Reader       reader.Reader
+	Entity       interface{}
+	Loader       loader.Loader
+	Source       []source.Source
+	InitCallBack []InitCallback
 }
 
 type Option func(options *Options)
+type InitCallback func()
