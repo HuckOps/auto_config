@@ -13,6 +13,7 @@ type Loader interface {
 type Watcher interface {
 	//Update(snapshot SnapShot)
 	Next() (*SnapShot, error)
+	Stop() error
 }
 type SnapShot struct {
 	Version    time.Time

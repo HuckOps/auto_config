@@ -3,6 +3,7 @@ package auto_config
 import (
 	"auto_config/loader"
 	"auto_config/reader"
+	"fmt"
 	"sync"
 )
 
@@ -10,6 +11,7 @@ type Config struct {
 	opts     Options
 	snapshot loader.SnapShot
 	sync.RWMutex
+	exit chan bool
 }
 
 func NewConfig(opts ...Option) (*Config, error) {
@@ -58,18 +60,19 @@ func (config *Config) Scan() error {
 }
 
 func (config *Config) Watcher() {
-	watch := func(w loader.Watcher) {
+	watch := func(w loader.Watcher) error {
 		for {
 			snapshot, err := w.Next()
+			fmt.Println(snapshot, err)
 			if err != nil {
-				panic(err)
+				return err
 			}
 			config.Lock()
 			config.snapshot = *snapshot
 			err = config.Scan()
 			if err != nil {
 				config.Unlock()
-				panic(err)
+				return err
 			}
 
 			for _, callback := range config.opts.InitCallBack {
@@ -78,6 +81,26 @@ func (config *Config) Watcher() {
 			config.Unlock()
 		}
 	}
-	loadWatcher := config.opts.Loader.Watcher()
-	go watch(loadWatcher)
+	for {
+		loadWatcher := config.opts.Loader.Watcher()
+		configBreak := make(chan bool)
+		go func() {
+			select {
+			case <-configBreak:
+				//case <-config.exit:
+			}
+			_ = loadWatcher.Stop()
+		}()
+		//go watch(loadWatcher)
+		//select {}
+		if err := watch(loadWatcher); err != nil {
+			fmt.Println(err)
+		}
+		close(configBreak)
+		select {
+		case <-configBreak:
+			return
+		}
+	}
+
 }

@@ -33,6 +33,9 @@ func (w *watcher) Next() (*source.ChangeSet, error) {
 		return nil, err
 	}
 }
+func (w *watcher) Stop() error {
+	return w.fw.Close()
+}
 
 func NewWatcher(f *file) (source.Watcher, error) {
 	fswatcher, err := fsnotify.NewWatcher()

@@ -50,6 +50,10 @@ func (f *file) Watcher() (source.Watcher, error) {
 	return NewWatcher(f)
 }
 
+func (f *file) Path() string {
+	return f.path
+}
+
 func NewSource(opts ...source.Option) source.Source {
 	options := source.NewOptions(opts...)
 	f, _ := options.Context.Value(fileKeyPath{}).(string)
