@@ -9,6 +9,7 @@ type Loader interface {
 	Load(...source.Source) error
 	Watcher() Watcher
 	Snapshot() SnapShot
+	EnableReaderPanicSkip()
 }
 type Watcher interface {
 	//Update(snapshot SnapShot)

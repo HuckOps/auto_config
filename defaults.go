@@ -3,7 +3,6 @@ package auto_config
 import (
 	"auto_config/loader"
 	"auto_config/reader"
-	"fmt"
 	"sync"
 )
 
@@ -26,6 +25,9 @@ func NewConfig(opts ...Option) (*Config, error) {
 	options.Loader = loader.NewLoader(loader.WithReader(options.Reader))
 	// 首次读取文件
 	err := options.Loader.Load(options.Source...)
+	// 启用异常跳过，主要应对文件修改错误或者误操作问题
+	options.Loader.EnableReaderPanicSkip()
+
 	if err != nil {
 		return &Config{}, err
 	}
@@ -63,7 +65,7 @@ func (config *Config) Watcher() {
 	watch := func(w loader.Watcher) error {
 		for {
 			snapshot, err := w.Next()
-			fmt.Println(snapshot, err)
+			//fmt.Println(snapshot, err)
 			if err != nil {
 				return err
 			}
@@ -94,7 +96,7 @@ func (config *Config) Watcher() {
 		//go watch(loadWatcher)
 		//select {}
 		if err := watch(loadWatcher); err != nil {
-			fmt.Println(err)
+			//fmt.Println(err)
 		}
 		close(configBreak)
 		select {

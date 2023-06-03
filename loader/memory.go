@@ -1,10 +1,8 @@
 package loader
 
 import (
-	"auto_config/common"
 	"auto_config/reader"
 	"auto_config/source"
-	"auto_config/source/dir"
 	"errors"
 	"fmt"
 	"strings"
@@ -19,20 +17,12 @@ type memory struct {
 	SnapShot SnapShot
 	watcher  *watcher
 	sync.RWMutex
-	exit chan bool
+	exit      chan bool
+	panicSkip bool
 }
 type watcher struct {
 	updates chan SnapShot
 	exit    chan bool
-}
-
-func (m *memory) dirWatcher(path string) {
-	w, _ := dir.NewWatcher(path)
-	for {
-		fmt.Println("test")
-		file, _ := w.Next()
-		fmt.Println(file)
-	}
 }
 
 // 文件监视器，文件更新时回写内存
@@ -71,17 +61,22 @@ func (m *memory) watch(idx int, s source.Source) {
 		sourceWatcher.Stop()
 	}()
 	// 监听源监听器
+panicSkipTag:
 	if err := watcher(idx, sourceWatcher); err != nil {
 		fmt.Println(err)
 		time.Sleep(time.Second)
 	}
+	if m.panicSkip {
+		goto panicSkipTag
+	}
+
 	// 监听异常时关闭通道
 	close(lwBreak)
 	//// 关闭装载器
-	//select {
-	//case <-m.exit:
-	//	return
-	//}
+	select {
+	case <-m.exit:
+		return
+	}
 }
 
 func (m *memory) reload() error {
@@ -105,7 +100,6 @@ func GetDir(path string) string {
 
 func (m *memory) Load(sources ...source.Source) error {
 	var failedSource []interface{}
-	var confDirs []string
 	for _, source := range sources {
 		set, err := source.Read()
 		if err != nil {
@@ -117,14 +111,9 @@ func (m *memory) Load(sources ...source.Source) error {
 		m.sets = append(m.sets, set)
 		m.sources = append(m.sources, source)
 		idx := len(m.sets) - 1
-		confDirs = append(confDirs, GetDir(source.Path()))
 		m.Unlock()
 		go m.watch(idx, source)
 
-	}
-	confDirs = common.RemoveRepeatedElementAndEmpty(confDirs)
-	for _, dir := range confDirs {
-		go m.dirWatcher(dir)
 	}
 	if len(failedSource) != 0 {
 		return errors.New("ReadFile error")
@@ -182,6 +171,10 @@ func (w *watcher) Stop() error {
 		close(w.updates)
 	}
 	return nil
+}
+
+func (m *memory) EnableReaderPanicSkip() {
+	m.panicSkip = true
 }
 
 func NewLoader(opts ...Option) Loader {
