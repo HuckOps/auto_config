@@ -1,10 +1,10 @@
 package loader
 
 import (
-	"auto_config/reader"
-	"auto_config/source"
 	"errors"
 	"fmt"
+	"github.com/huckops/auto_config/reader"
+	"github.com/huckops/auto_config/source"
 	"strings"
 	"sync"
 	"time"

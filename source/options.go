@@ -1,9 +1,9 @@
 package source
 
 import (
-	"auto_config/encoder"
-	"auto_config/encoder/json"
 	"context"
+	"github.com/huckops/auto_config/encoder"
+	"github.com/huckops/auto_config/encoder/json"
 )
 
 type Options struct {

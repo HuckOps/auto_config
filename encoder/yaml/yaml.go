@@ -1,8 +1,8 @@
 package yaml
 
 import (
-	"auto_config/encoder"
 	yamlv2 "github.com/ghodss/yaml"
+	"github.com/huckops/auto_config/encoder"
 )
 
 type yaml struct{}

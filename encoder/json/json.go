@@ -1,8 +1,8 @@
 package json
 
 import (
-	"auto_config/encoder"
 	jsonEncoding "encoding/json"
+	"github.com/huckops/auto_config/encoder"
 )
 
 type json struct{}

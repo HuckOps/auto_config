@@ -1,9 +1,9 @@
 package auto_config
 
 import (
-	"auto_config/loader"
-	"auto_config/source/file"
 	"fmt"
+	"github.com/huckops/auto_config/loader"
+	"github.com/huckops/auto_config/source/file"
 	"testing"
 )
 

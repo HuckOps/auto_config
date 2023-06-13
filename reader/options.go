@@ -1,9 +1,9 @@
 package reader
 
 import (
-	"auto_config/encoder"
-	"auto_config/encoder/json"
-	"auto_config/encoder/yaml"
+	"github.com/huckops/auto_config/encoder"
+	"github.com/huckops/auto_config/encoder/json"
+	"github.com/huckops/auto_config/encoder/yaml"
 )
 
 type Options struct {

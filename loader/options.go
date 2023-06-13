@@ -1,9 +1,9 @@
 package loader
 
 import (
-	"auto_config/reader"
-	"auto_config/source"
 	"context"
+	"github.com/huckops/auto_config/reader"
+	"github.com/huckops/auto_config/source"
 )
 
 type Options struct {

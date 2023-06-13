@@ -1,8 +1,8 @@
 package file
 
 import (
-	"auto_config/source"
 	"github.com/fsnotify/fsnotify"
+	"github.com/huckops/auto_config/source"
 	"os"
 )
 

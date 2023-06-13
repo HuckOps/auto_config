@@ -1,7 +1,7 @@
 package loader
 
 import (
-	"auto_config/source"
+	"github.com/huckops/auto_config/source"
 	"time"
 )
 

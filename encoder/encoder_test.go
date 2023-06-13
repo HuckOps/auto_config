@@ -1,7 +1,7 @@
 package encoder
 
 import (
-	"auto_config/encoder/yaml"
+	"github.com/huckops/auto_config/encoder/yaml"
 	"io/ioutil"
 	"testing"
 )

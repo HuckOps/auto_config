@@ -1,6 +1,6 @@
 package auto_config
 
-import "auto_config/source"
+import "github.com/huckops/auto_config/source"
 
 func WithEntity(v interface{}) Option {
 	return func(options *Options) {

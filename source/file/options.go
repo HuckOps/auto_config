@@ -1,8 +1,8 @@
 package file
 
 import (
-	"auto_config/source"
 	"context"
+	"github.com/huckops/auto_config/source"
 )
 
 //type Options struct {

@@ -1,8 +1,8 @@
 package auto_config
 
 import (
-	"auto_config/loader"
-	"auto_config/reader"
+	"github.com/huckops/auto_config/loader"
+	"github.com/huckops/auto_config/reader"
 	"sync"
 )
 
